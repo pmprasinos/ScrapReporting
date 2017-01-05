@@ -1,0 +1,901 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MonthList" xml:space="preserve">
+    <value>1	20154	03302015
+2	20155	05042015
+3	20156	06012015
+4	20157	06292015
+5	20158	08032015
+6	20159	08312015
+7	201510	09282015
+8	201511	11022015
+9	201512	11302015
+10	20161	01042016
+11	20162	02012016
+12	20163	03072016
+13	20164	04042016
+14	20165	05092016
+15	20166	06062016
+16	20167	07042016
+17	20168	08082016
+18	20169	09052016
+19	201610	10032016
+20	201611	11072016
+21	201612	12052016
+22	20171	01022017
+23	20172	02062017
+24	20173	03062017
+25	20174	04032017
+26	20175	05082017
+27	20176	06052017
+28	20177	07032017
+29	20178	08072017
+30	20179	09042017
+31	201710	10022017
+32	201711	11062017
+33	201712	12042017
+34	20181	01012018
+35	20182	02052018
+36	20183	03052018
+37	20184	04022018
+38	20185	05072018
+39	20186	06042018
+40	20187	07022018
+41	20188	08062018
+42	20189	09032018
+43	201810	10012018
+44	201811	11052018
+45	201812	12032018
+46	20191	01012019
+47	20192	02042019
+48	20193	03042019
+49	20194	04012019
+50	20195	05062019
+51	20196	06032019
+52	20197	07012019
+53	20198	08052019
+54	20199	09022019
+55	201910	09302019
+56	201911	11042019
+57	201912	12022019
+58	20201	01012020
+59	20202	02032020
+60	20203	03022020
+61	20204	03302020
+62	20205	05042020
+63	20206	06012020
+64	20207	06292020
+65	20208	08032020</value>
+    <comment>MonthList</comment>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value>&lt;!--Olap Javascript--&gt;
+&lt;HTML&gt;
+&lt;HEAD&gt;
+&lt;META name="HandheldFriendly" content="True"&gt;
+&lt;META name="PalmComputingPlatform" content="True"&gt;
+&lt;TITLE&gt;WebFOCUS Report&lt;/TITLE&gt;
+&lt;script language='javascript'&gt;
+var ibiOptions = new Array("expandByRow");
+var focexurl = "/ibi_apps/WFServlet?IBIF_webapp=/ibi_apps&amp;IBIC_server=EDASERVE&amp;IBIWF_msgviewer=OFF&amp;IBIAPP_app=prodvis&amp;&amp;IBIMR_drill=X,qavistes/qavistes.htm&amp;";
+var fochtmlurl = "/ibi_html";
+var serverLanguage='en';
+&lt;/script&gt;
+&lt;script language='javascript' src='/ibi_html/javaassist/nls.js'&gt;&lt;/script&gt;
+&lt;script language='javascript' src='/ibi_html/javaassist/ibi/html/js/ibigbl.js'&gt;&lt;/script&gt;
+&lt;STYLE TYPE="text/css"&gt;
+&lt;!--
+TD { vertical-align:top; padding-left:6pt; padding-right:6pt; }
+TABLE,PRE,SPAN { font-family:TREBUCHET MS; font-size:9pt; color:#424649; }
+.x2_0 { font-family:TREBUCHET MS; font-size:9pt; color:#424649; background-color:#FFFFFF; }
+.x2_1 { font-family:TREBUCHET MS; font-size:9pt; color:#424649; background-color:#EBEBF0; }
+.x3 { font-family:TREBUCHET MS; font-size:9pt; font-weight:bold; color:#FFFFFF; background-color:#666666; }
+.x4 { font-family:TREBUCHET MS; font-size:14pt; font-weight:bold; font-style:italic; color:#424649; text-align:center; }
+.x5 { font-family:TREBUCHET MS; font-size:12pt; font-weight:bold; font-style:italic; color:#424649; text-align:center; }
+.x6 { font-family:TREBUCHET MS; font-size:12pt; font-weight:bold; color:#424649; text-align:center; }
+.x7 { font-family:TREBUCHET MS; font-size:10pt; font-weight:bold; color:#424649; text-align:center; }
+.x8 { font-family:TREBUCHET MS; font-size:10pt; font-weight:bold; color:#424649; }
+.x9 { font-family:TREBUCHET MS; font-size:10pt; font-weight:bold; color:#424649; }
+.x10 { font-family:TREBUCHET MS; font-size:9pt; font-weight:bold; color:#424649; background-color:#C8C8C8; }
+.x11 { font-family:TREBUCHET MS; font-size:9pt; font-weight:bold; color:#424649; background-color:#DAE1E8; }
+.x12 { font-family:TREBUCHET MS; font-size:9pt; font-weight:bold; color:#424649; }
+.x13 { font-family:TREBUCHET MS; font-size:6pt; font-style:italic; color:#424649; text-align:right; }
+.x14 { font-family:TREBUCHET MS; font-size:9pt; font-weight:bold; color:#FFFFFF; background-color:#424649; }
+--&gt;
+&lt;/STYLE&gt;
+&lt;script language='javascript'&gt;
+ibigblloadCss(null);
+&lt;/script&gt;
+&lt;/HEAD&gt;
+&lt;BODY ONLOAD='ibigblOnLoad();'&gt;
+&lt;TABLE CELLPADDING=1 ibiattr="table1"&gt;
+&lt;TR&gt;
+&lt;TD class='x3' STYLE="vertical-align:bottom; "  COLSPAN="4" title="PARTNO, MILESTONE, FISCAL_QYR, WORKORDERNO"&gt;
+ &lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x3' STYLE="vertical-align:bottom; " &gt;
+MIN                 &lt;BR&gt;THRUPUT_QTYCOMPLETED&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x3' STYLE="vertical-align:bottom; " &gt;
+                     &lt;BR&gt;LABOR_DOLLARS_CHARGED&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x3' STYLE="vertical-align:bottom; " &gt;
+               &lt;BR&gt;DOLLARS_CHARGED&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR id='by_1'&gt;&lt;TD NOWRAP class='x10' title="PARTNO" COLSPAN="4" ibiattrevent="by_1"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+13475&lt;/TD&gt;
+&lt;TD NOWRAP ALIGN=RIGHT class='x10'&gt;
+-4&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+721.84&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+2,896.65&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="MILESTONE" COLSPAN="3" ibiattrevent="by_1_1"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_1" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+.&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+.00&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+.00&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="FISCAL_QYR" COLSPAN="2" ibiattrevent="by_1_1_1"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_1_1" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+FY15Q3&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+.00&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+.00&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_1_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_0' title="WORKORDERNO"&gt;
+1013475-00006&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+0&lt;/TD&gt;
+&lt;TD NOWRAP ALIGN=RIGHT class='x2_0'&gt;
+-25.67&lt;/TD&gt;
+&lt;TD NOWRAP ALIGN=RIGHT class='x2_0'&gt;
+-224.35&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_1_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_1' title="WORKORDERNO"&gt;
+1013475-00006.1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+25.67&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+224.35&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="FISCAL_QYR" COLSPAN="2" ibiattrevent="by_1_1_2"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_1_2" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+FY16Q1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+.00&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+.00&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_1_2" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_0' title="WORKORDERNO"&gt;
+1013475-00007&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+0&lt;/TD&gt;
+&lt;TD NOWRAP ALIGN=RIGHT class='x2_0'&gt;
+-14.80&lt;/TD&gt;
+&lt;TD NOWRAP ALIGN=RIGHT class='x2_0'&gt;
+-86.63&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_1_2" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_1' title="WORKORDERNO"&gt;
+1013475-00007.1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+14.80&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+86.63&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="MILESTONE" COLSPAN="3" ibiattrevent="by_1_2"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_2" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+01&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+87.89&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+282.48&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_2" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="FISCAL_QYR" COLSPAN="2" ibiattrevent="by_1_2_1"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_2_1" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+FY15Q3&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+54.51&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+192.92&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_2_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_0' title="WORKORDERNO"&gt;
+1013475-00006&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+54.51&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+192.92&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_2" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="FISCAL_QYR" COLSPAN="2" ibiattrevent="by_1_2_2"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_2_2" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+FY16Q1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+33.38&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+89.56&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_2_2" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_1' title="WORKORDERNO"&gt;
+1013475-00007&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+33.38&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+89.56&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="MILESTONE" COLSPAN="3" ibiattrevent="by_1_3"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_3" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+02&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+24.18&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+373.60&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_3" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="FISCAL_QYR" COLSPAN="2" ibiattrevent="by_1_3_1"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_3_1" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+FY15Q3&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+12.30&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+190.09&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_3_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_0' title="WORKORDERNO"&gt;
+1013475-00006&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+12.30&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+190.09&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_3" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="FISCAL_QYR" COLSPAN="2" ibiattrevent="by_1_3_2"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_3_2" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+FY16Q1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+11.87&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+183.50&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_3_2" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_1' title="WORKORDERNO"&gt;
+1013475-00007&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+11.87&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+183.50&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="MILESTONE" COLSPAN="3" ibiattrevent="by_1_4"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_4" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+03&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+.57&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+427.30&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_4" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="FISCAL_QYR" COLSPAN="2" ibiattrevent="by_1_4_1"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_4_1" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+FY15Q3&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+.34&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+256.38&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_4_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_0' title="WORKORDERNO"&gt;
+1013475-00006&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+.34&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+256.38&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_4" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="FISCAL_QYR" COLSPAN="2" ibiattrevent="by_1_4_2"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_4_2" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+FY16Q1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+.23&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+170.92&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_4_2" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_1' title="WORKORDERNO"&gt;
+1013475-00007&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+.23&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+170.92&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="MILESTONE" COLSPAN="3" ibiattrevent="by_1_5"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_5" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+04&lt;/TD&gt;
+&lt;TD NOWRAP ALIGN=RIGHT class='x10'&gt;
+-1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+159.92&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+527.47&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_5" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="FISCAL_QYR" COLSPAN="2" ibiattrevent="by_1_5_1"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_5_1" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+FY15Q3&lt;/TD&gt;
+&lt;TD NOWRAP ALIGN=RIGHT class='x10'&gt;
+-1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+68.23&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+233.78&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_5_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_0' title="WORKORDERNO"&gt;
+1013475-00006&lt;/TD&gt;
+&lt;TD NOWRAP ALIGN=RIGHT class='x2_0'&gt;
+-1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+68.23&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+233.78&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_5" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="FISCAL_QYR" COLSPAN="2" ibiattrevent="by_1_5_2"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_5_2" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+FY15Q4&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+36.82&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+118.17&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_5_2" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_1' title="WORKORDERNO"&gt;
+1013475-00006.1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+36.82&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+118.17&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_5" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="FISCAL_QYR" COLSPAN="2" ibiattrevent="by_1_5_3"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_5_3" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+FY16Q1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+54.87&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+175.52&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_5_3" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_0' title="WORKORDERNO"&gt;
+1013475-00007&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+54.87&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+175.52&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="MILESTONE" COLSPAN="3" ibiattrevent="by_1_6"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_6" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+05&lt;/TD&gt;
+&lt;TD NOWRAP ALIGN=RIGHT class='x10'&gt;
+-5&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+399.73&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+1,143.00&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_6" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="FISCAL_QYR" COLSPAN="2" ibiattrevent="by_1_6_1"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_6_1" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+FY15Q3&lt;/TD&gt;
+&lt;TD NOWRAP ALIGN=RIGHT class='x10'&gt;
+-1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+129.24&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+387.66&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_6_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_1' title="WORKORDERNO"&gt;
+1013475-00006&lt;/TD&gt;
+&lt;TD NOWRAP ALIGN=RIGHT class='x2_1'&gt;
+-1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+129.24&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+387.66&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_6" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="FISCAL_QYR" COLSPAN="2" ibiattrevent="by_1_6_2"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_6_2" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+FY15Q4&lt;/TD&gt;
+&lt;TD NOWRAP ALIGN=RIGHT class='x10'&gt;
+-3&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+35.42&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+99.71&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_6_2" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_0' title="WORKORDERNO"&gt;
+1013475-00006&lt;/TD&gt;
+&lt;TD NOWRAP ALIGN=RIGHT class='x2_0'&gt;
+-2&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+.00&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+.00&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_6_2" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_1' title="WORKORDERNO"&gt;
+1013475-00006.1&lt;/TD&gt;
+&lt;TD NOWRAP ALIGN=RIGHT class='x2_1'&gt;
+-1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+35.42&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+99.71&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_6" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="FISCAL_QYR" COLSPAN="2" ibiattrevent="by_1_6_3"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_6_3" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+FY16Q1&lt;/TD&gt;
+&lt;TD NOWRAP ALIGN=RIGHT class='x10'&gt;
+-1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+235.07&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+655.63&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_6_3" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_0' title="WORKORDERNO"&gt;
+1013475-00006.1&lt;/TD&gt;
+&lt;TD NOWRAP ALIGN=RIGHT class='x2_0'&gt;
+-1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+150.41&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+437.21&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_6_3" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_1' title="WORKORDERNO"&gt;
+1013475-00007&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+84.66&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+218.42&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="MILESTONE" COLSPAN="3" ibiattrevent="by_1_7"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_7" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+06&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+15.64&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+44.03&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_7" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="FISCAL_QYR" COLSPAN="2" ibiattrevent="by_1_7_1"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_7_1" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+FY16Q1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+15.64&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+44.03&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_7_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_0' title="WORKORDERNO"&gt;
+1013475-00006.1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+15.64&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+44.03&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="MILESTONE" COLSPAN="3" ibiattrevent="by_1_8"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_8" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+08&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+.00&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+.00&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_8" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="FISCAL_QYR" COLSPAN="2" ibiattrevent="by_1_8_1"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_8_1" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+FY16Q1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+.00&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+.00&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_8_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_1' title="WORKORDERNO"&gt;
+1013475-00006.1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+.00&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+.00&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="MILESTONE" COLSPAN="3" ibiattrevent="by_1_9"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_9" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+10&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+33.90&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+98.76&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_9" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="FISCAL_QYR" COLSPAN="2" ibiattrevent="by_1_9_1"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_9_1" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+FY16Q1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+33.90&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+98.76&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_9_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_0' title="WORKORDERNO"&gt;
+1013475-00006.1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+0&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+33.90&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_0'&gt;
+98.76&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="MILESTONE" COLSPAN="3" ibiattrevent="by_1_10"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_10" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+13&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+.00&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+.00&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_10" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD NOWRAP class='x10' title="FISCAL_QYR" COLSPAN="2" ibiattrevent="by_1_10_1"&gt;
+&lt;A&gt;&lt;img border=0 ibiattr="by_1_10_1" src='/ibi_html/javaassist/icons/plus.gif'&gt;&lt;/A&gt;
+FY16Q1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+.00&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x10'&gt;
+.00&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;TR ibiattr="by_1_10_1" STYLE="display: none; " &gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD&gt;&lt;/TD&gt;
+&lt;TD class='x2_1' title="WORKORDERNO"&gt;
+1013475-00006.1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+1&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+.00&lt;/TD&gt;
+&lt;TD ALIGN=RIGHT class='x2_1'&gt;
+.00&lt;/TD&gt;
+&lt;/TR&gt;
+&lt;/TABLE&gt;
+&lt;script language='javascript'&gt;
+ibigblWriteDivs();
+&lt;/script&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;
+&lt;!--
+(FOC3330) EXPANDBYROW: Not supported with BORDER.
+0 NUMBER OF RECORDS IN TABLE=      528  LINES=     22
+
+--&gt;</value>
+  </data>
+</root>
