@@ -35,7 +35,7 @@
     <InstallUrl>\\slfs01\shared\prasinos\mods\ScrapMailer\</InstallUrl>
     <ProductName>ScrapReporting</ProductName>
     <PublisherName>Prasinos</PublisherName>
-    <ApplicationRevision>112</ApplicationRevision>
+    <ApplicationRevision>123</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
