@@ -15,10 +15,7 @@ Module Module1
     Dim SendOrDisp As Boolean = True
 
     Sub Main()
-        'EmailReviewReminders()
 
-
-        '   Dim y As Boolean = FindEmails("yuuup")
         Dim MonthArray(,) As String = GetMonthArray(My.Resources.MonthList)
         Dim Months(5) As String
         Months(5) = Replace(MakeWebfocusDate(Today), Year(Now), Year(Now) - 1)
@@ -39,62 +36,37 @@ Module Module1
             Loop
 
             If Hour(Now) > 18 Then
+                Console.WriteLine("Checking for daily ship reports for week ending " & Today)
                 EmailDailyShips(Today)
             Else
-                If Not FileIO.FileSystem.FileExists("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & "scrap" & Month(Now) & "-" & Day(Now) & "-" & Year(Now)) Then EmailScrap()
+                Console.WriteLine("Checking for daily ship reports for week ending " & Today.AddDays(-1))
+                EmailDailyShips(Today.AddDays(-1))
+                If Today.DayOfWeek = DayOfWeek.Monday Then
+                    Console.WriteLine("Checking for weekly ship reports for week ending " & Today.AddDays(-1))
+                    EmailWeeklyShips(Today.AddDays(-1))
+                End If
+                If Not FileIO.FileSystem.FileExists("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & "scrap" & Month(Now) & "-" & Day(Now) & "-" & Year(Now)) Then
+                    Console.WriteLine("Executing scrap report pull/mailing for " & Today)
+                    EmailScrap()
+                End If
                 FileIO.FileSystem.WriteAllText("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & "scrap" & Month(Now) & "-" & Day(Now) & "-" & Year(Now), "", True)
-                'EmailReviewReminders()
+
             End If
 
-        ElseIf Hour(Now) < 8 And Today.DayOfWeek = DayOfWeek.Monday Then
-            Do Until wf.IsLoggedIn
-                LogInInfo = GetUserPasswordandFex()
-                wf.LogIn(LogInInfo(0), LogInInfo(1))
-            Loop
-            EmailDailyShips(Today.AddDays(-1))
-            EmailWeeklyShips(Today.AddDays(-1))
+        ElseIf Today.DayOfWeek = DayOfWeek.Sunday Then
+            Console.WriteLine("Checking for weekly ship reports for week ending " & Today)
+            EmailWeeklyShips(Today)
 
         End If
 
-        'If (Hour(Now) = 5 Or Hour(Now) = 23) And InStr(Environment.MachineName, "slreport01", CompareMethod.Text) <> 0 Then
-        '    Shell("shutdown -r -f -t 600")
-        '    Exit Sub
-        'End If
-
-    End Sub
-
-    Sub EmailReviewReminders()
-        Dim cn As New SqlClient.SqlConnection(ConnectionString)
-        Dim cmd As New SqlClient.SqlCommand
-        cmd.CommandType = CommandType.Text
-        cmd.CommandText = "SELECT SALES_ORDER_NO" &
-                            "From WFLOCAL..PO_REVIEW" &
-                            "Join (Select MAX(TTIMESTAMP) As TTIMESTAMP FROM WFLOCAL..PO_REVIEW " &
-                                    "WHERE ISNULL(QUALITY,'10') = '10' AND CONVERT(DATE, TTIMESTAMP)<>'10/18/2016'" &
-                                  ") C" &
-                           " ON PO_REVIEW.TTIMESTAMP=C.TTIMESTAMP"" & _"
-        cmd.Connection = cn
-        cn.Open()
-
-        Using dr As SqlClient.SqlDataReader = cmd.ExecuteReader
-            If dr.HasRows Then
-                While dr.Read()
-
-                End While
-            End If
-        End Using
-        cn.Close()
     End Sub
 
 
     Public Function GetUserPasswordandFex() As String()
         Dim h As New Random
-
         Dim Usernames() As String = {"hfaizi", "mreyes", "MALMARAZ", "MARJMAND", "HYANG", "GWONG", "VDELACRUZ", "JTIBAYAN", "JSOLIS", "ASINGH", "GREYES", "JPIMENTEL", "TOSULLIVAN", "MMARTIN", "VLOPEZ", "SLI", "JIMPERIAL", "JHERNANDEZ", "FHARO", "CGOUTAMA", "HGOMEZ", "EGONZALEZ", "CDAROSA"}
-
         Dim y As Integer = h.Next(0, Usernames.Length)
         Dim ps As String
-
         Dim FexAdd As String = "&IBIMR_sub_action=MR_MY_REPORT"
         If Usernames(y) <> "pprasinos" Then
             FexAdd = "&IBIMR_sub_action=MR_MY_REPORT&IBIMR_proxy_id=pprasino.htm&"
@@ -104,13 +76,12 @@ Module Module1
         End If
         Debug.Print(Usernames(y))
         Return {Usernames(y), ps, FexAdd}
-
     End Function
 
 
 
     Sub EmailDailyShips(DaytoCheck As Date)
-
+        '##############NOTES ON DEFAULT SHIP REPORT ON CNUM = "0003523" ~line 167###############
         Dim SavePath As String
         Dim RefBase As String = "http://opsfocus01:8080/ibi_apps/Controller?WORP_REQUEST_TYPE=WORP_LAUNCH_CGI&IBIMR_action=MR_RUN_FEX&IBIMR_domain=qavistes/qavistes.htm&IBIMR_folder=qavistes/qavistes.htm%23salesshipmen&IBIMR_fex=pprasino/shipments_bycustomer.fex&IBIMR_flags=myreport%2CinfoAssist%2Creport%2Croname%3Dqavistes/mrv/shipping_data.fex%2CisFex%3Dtrue%2CrunPowerPoint%3Dtrue&IBIMR_sub_action=MR_MY_REPORT&WORP_MRU=true&&WORP_MPV=ab_gbv&&IBIMR_random=8076&CUSTOMER_NO="
         RefBase = Replace(RefBase, "&IBIMR_sub_action=MR_MY_REPORT", LogInInfo(2))
@@ -120,38 +91,44 @@ Module Module1
         j = wf.GetReporth(Replace("http://opsfocus01:8080/ibi_apps/Controller?WORP_REQUEST_TYPE=WORP_LAUNCH_CGI&IBIMR_action=MR_RUN_FEX&IBIMR_domain=qavistes/qavistes.htm&IBIMR_folder=qavistes/qavistes.htm%23salesshipmen&IBIMR_fex=pprasino/capshipments.fex&IBIMR_flags=myreport%2CinfoAssist%2Creport%2Croname%3Dqavistes/mrv/shipping_data.fex%2CisFex%3Dtrue%2CrunPowerPoint%3Dtrue&IBIMR_sub_action=MR_MY_REPORT&WORP_MRU=true&&WORP_MPV=ab_gbv&GESHIPPED_D=" & LastDay & "&LESHIPPED_D=" & LastDay & "&IBIMR_random=44423&", "&IBIMR_sub_action=MR_MY_REPORT", LogInInfo(2)))
 
         If (Today.DayOfWeek = DayOfWeek.Monday Or Today.DayOfWeek = DayOfWeek.Thursday) And Not FileIO.FileSystem.FileExists("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & "CC_OSP" & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck)) Then
-            SavePath = "\\slfs01\shared\prasinos\ppexternal\ShipReports\OSP_CC_Orders.xlsx"
+            Console.Write("Pulling OSP_CC_Orders.xlsx...")
+            SavePath = " \\ slfs01 \shared\prasinos\ppexternal\ShipReports\OSP_CC_Orders.xlsx"
             wf.GetReportf(SavePath, "qavistes/qavistes.htm#purchasingre", "kmcclish:kmcclish/osp_pos_open_list_carson_city.fex")
+            Console.WriteLine("DONE")
+            Console.WriteLine("Generating email and recording pull...")
             Dim filelist As New List(Of String)
             filelist.Add(SavePath)
-            ' If FindEmails("HoneyWell Ship Report " & Month(daytocheck) & "/" & Day(daytocheck) & "/" & Year(daytocheck)) Then SendOrDisp = False
             EmailFile(filelist, {"kmcclish@pccstructurals.com", "dfinlayson@pccstructurals.com"}, "Please see attached for OSP Carson City Orders" & vbCrLf & vbCrLf & "This is an automated message.", "OSP Carson City Orders " & Month(DaytoCheck) & "/" & Day(DaytoCheck) & "/" & Year(DaytoCheck), , SendOrDisp, False)
             filelist = Nothing
             FileIO.FileSystem.WriteAllText("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & "CC_OSP" & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck), "", False)
-
+            Console.WriteLine("DONE")
         End If
 
-        If WereShipments("0003917", j) And Not FileIO.FileSystem.FileExists("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & CNum & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck)) Then
+        If WereShipments("0003917", j) And Not FileIO.FileSystem.FileExists("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & "0003917" & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck)) Then
+            Console.Write("Pulling HonywellShipments.xlsx...")
             SavePath = "\\slfs01\shared\prasinos\ppexternal\ShipReports\HonywellShipments.xlsx"
             wf.GetReportf(SavePath, Replace("http://opsfocus01:8080/ibi_apps/Controller?WORP_REQUEST_TYPE=WORP_LAUNCH_CGI&IBIMR_action=MR_RUN_FEX&IBIMR_domain=qavistes/qavistes.htm&IBIMR_folder=qavistes/qavistes.htm%23salesshipmen&IBIMR_fex=pprasino/shipping_data1.fex&IBIMR_flags=myreport%2CinfoAssist%2Creport%2Croname%3Dqavistes/mrv/shipping_data.fex%2CisFex%3Dtrue%2CrunPowerPoint%3Dtrue&IBIMR_sub_action=MR_MY_REPORT&WORP_MRU=true&&WORP_MPV=public&&IBIMR_random=6427&", "&IBIMR_sub_action=MR_MY_REPORT", LogInInfo(2)))
+            Console.WriteLine("DONE")
+            Console.WriteLine("Generating email and recording pull...")
             Dim filelist As New List(Of String)
             filelist.Add(SavePath)
             ' If FindEmails("HoneyWell Ship Report " & Month(daytocheck) & "/" & Day(daytocheck) & "/" & Year(daytocheck)) Then SendOrDisp = False
-            EmailFile(filelist, {"Stepanka.Bacova@Honeywell.com", "andrea.balderaz@honeywell.com", "JJUDSON@PCCSTRUCTURALS.COM"}, "Please see attached for yesterday's shipments." & vbCrLf & vbCrLf & "This is an automated message.", "HoneyWell Ship Report " & Month(DaytoCheck) & "/" & Day(DaytoCheck) & "/" & Year(DaytoCheck), , SendOrDisp, False)
+            EmailFile(filelist, {"Stepanka.Bacova@Honeywell.com", "jon.herdt@honeywell.com", "JJUDSON@PCCSTRUCTURALS.COM"}, "Please see attached for yesterday's shipments." & vbCrLf & vbCrLf & "This is an automated message.", "HoneyWell Ship Report " & Month(DaytoCheck) & "/" & Day(DaytoCheck) & "/" & Year(DaytoCheck), , SendOrDisp, False)
             filelist = Nothing
             FileIO.FileSystem.WriteAllText("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & "0003917" & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck), "", False)
+            Console.WriteLine("DONE")
         End If
-
 
         CNum = "0006033"
         If WereShipments(CNum, j) And Not FileIO.FileSystem.FileExists("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & CNum & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck)) Then
+            Console.Write("Pulling ")
             Dim PartFilterString As String = MakePartFilterString({"1", "1", "1", "1", "1"})
             Dim ref As String = RefBase & CNum & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & PartFilterString & "&IBIMR_random = 96021"
-
             Dim CompanyName As String = "NHBB"
             SavePath = "\\slfs01\Shared\prasinos\ppexternal\ShipReports\" & CompanyName & "Shipments.xlsx"
-
             wf.GetReportf(SavePath, ref)
+            Console.WriteLine("DONE")
+            Console.WriteLine("Generating email and recording pull...")
             Dim filelist1 As New List(Of String)
             filelist1.Add(SavePath)
             Dim Subject As String = CompanyName & " Ship Report " & Month(DaytoCheck) & "/" & Day(DaytoCheck) & "/" & Year(DaytoCheck)
@@ -159,19 +136,19 @@ Module Module1
             EmailFile(filelist1, {"bwilk@nhbb.com", "jmacdonald@nhbb.com", "rkibbee@nhbb.com"}, "Please see attached For shipments In the last 90 days" & vbCrLf & vbCrLf & "This Is an automated message.", Subject, , SendOrDisp, False)
             filelist1 = Nothing
             FileIO.FileSystem.WriteAllText("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & CNum & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck), "", False)
+            Console.WriteLine("DONE")
         End If
-
-
 
         CNum = ""
         If WereShipments(CNum, j, MakePartFilterString({"Q0191", "Q0192", "Q0193", "Q0194", "1"})) And Not FileIO.FileSystem.FileExists("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & CNum & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck)) Then
             Dim partfilterstring As String = MakePartFilterString({"Q0191", "Q0192", "Q0193", "Q0194", "1"})
             Dim ref As String = RefBase & CNum & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & partfilterstring & "&IBIMR_random = 96021"
-
             Dim CompanyName As String = "PCC"
             SavePath = "\\slfs01\Shared\prasinos\ppexternal\ShipReports\PCC_Shipments.xlsx"
-
+            Console.Write("Pulling PCCShipments.xlsx")
             wf.GetReportf(SavePath, ref)
+            Console.WriteLine("DONE")
+            Console.WriteLine("Generating email and recording pull...")
             Dim filelist1 As New List(Of String)
             filelist1.Add(SavePath)
             Dim Subject As String = CompanyName & " Ship Report " & Month(DaytoCheck) & "/" & Day(DaytoCheck) & "/" & Year(DaytoCheck)
@@ -179,50 +156,63 @@ Module Module1
             EmailFile(filelist1, {"Megan.Lyons@ge.com", "kevin.gaerke@ge.com", "jemiller@pccstructurals.com", "pprasinos@pccstructurals.com", "dlevine@pccstructurals.com", "jjudson@pccstructurals.com"}, "Please see attached For shipments In the last 90 days" & vbCrLf & vbCrLf & "This Is an automated message.", Subject, , SendOrDisp, False)
             filelist1 = Nothing
             FileIO.FileSystem.WriteAllText("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & CNum & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck), "", False)
+            Console.WriteLine("DONE")
         End If
 
-
+        '##############USE THE FOLLOWING BLOCK AS A TEMPLATE FOR NEW SHIP REPORTS BY CUSTOMER NUMBER###############
         CNum = "0003523"
         If WereShipments(CNum, j) And Not FileIO.FileSystem.FileExists("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & CNum & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck)) Then
             Dim partfilterstring As String = MakePartFilterString({"", "", "", "", "1"})
+            '#############CompanyName is used to uniquely name the file##############
             Dim CompanyName As String = "ExoticMetals"
             SavePath = "\\slfs01\Shared\prasinos\ppexternal\ShipReports\" & CompanyName & "Shipments.xlsx"
-            SavePath = "\\slfs01\Shared\prasinos\ppexternal\ShipReports\ExoticMetalsShipments.xlsx"
             Dim ref As String = RefBase & CNum & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & partfilterstring & "&IBIMR_random = 96021"
-
+            Console.Write("Pulling " & CompanyName & "Shipments.xlsx")
             wf.GetReportf(SavePath, ref)
+            Console.WriteLine("DONE")
+            Console.WriteLine("Generating email and recording pull...")
             Dim filelist1 As New List(Of String)
             filelist1.Add(SavePath)
             Dim Subject As String = CompanyName & " Ship Report " & Month(DaytoCheck) & "/" & Day(DaytoCheck) & "/" & Year(DaytoCheck)
             'If FindEmails(Subject) Then SendOrDisp = False
-            EmailFile(filelist1, {"christian.dewey@ExoticMetals.com"}, "Please see attached For shipments In the last 90 days." & vbCrLf & vbCrLf & "This Is an automated message.", Subject, , SendOrDisp, False)
+            EmailFile(filelist1, {"christian.dewey@ExoticMetals.com", "geoffrey.oakley@exoticmetals.com", "Taa.Yandall@ExoticMetals.com"}, "Please see attached For shipments In the last 90 days." & vbCrLf & vbCrLf & "This Is an automated message.", Subject, , SendOrDisp, False)
             filelist1 = Nothing
+            '#############Writing the file named for the CompanyName and date will prevent double sending an email(See conditions for this block)##############
             FileIO.FileSystem.WriteAllText("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & CNum & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck), "", False)
+            Console.WriteLine("DONE")
         End If
 
         CNum = "000B793"
         If WereShipments(CNum, j) And Not FileIO.FileSystem.FileExists("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & CNum & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck)) Then
             Dim partfilterstring As String = MakePartFilterString({"", "", "", "", "1"})
             Dim CompanyName As String = "SpaceX"
+            Console.Write("Pulling " & CompanyName & "Shipments.xlsx")
             SavePath = "\\slfs01\Shared\prasinos\ppexternal\ShipReports\" & CompanyName & "Shipments.xlsx"
             Dim ref As String = RefBase & CNum & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & partfilterstring & "&IBIMR_random = 96021"
             wf.GetReportf(SavePath, ref)
+            Console.WriteLine("DONE")
+            Console.WriteLine("Generating email and recording pull...")
             Dim filelist1 As New List(Of String)
             filelist1.Add(SavePath)
             Dim Subject As String = CompanyName & " Ship Report " & Month(DaytoCheck) & "/" & Day(DaytoCheck) & "/" & Year(DaytoCheck)
             ' If FindEmails(Subject) Then SendOrDisp = False
-            EmailFile(filelist1, {"Andrew.Paulsen@spacex.com", "Andrew.Albenesius@spacex.com", "Jennifer.Guey@spacex.com", "jjudson@pccstructurals.com"}, "Please see attached For shipments In the last 90 days." & vbCrLf & vbCrLf & "This Is an automated message.", Subject, , SendOrDisp, False)
+            EmailFile(filelist1, {"Andrew.Paulsen@spacex.com", "Jennifer.Guey@spacex.com", "jjudson@pccstructurals.com"}, "Please see attached For shipments In the last 90 days." & vbCrLf & vbCrLf & "This Is an automated message.", Subject, , SendOrDisp, False)
             filelist1 = Nothing
             FileIO.FileSystem.WriteAllText("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & CNum & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck), "", False)
+            Console.WriteLine("DONE")
         End If
 
         CNum = "0001906"
         If WereShipments(CNum, j) And Not FileIO.FileSystem.FileExists("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & CNum & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck)) Then
+
             Dim partfilterstring As String = MakePartFilterString({"", "", "", "", "1"})
             Dim CompanyName As String = "Magellan"
+            Console.Write("Pulling " & CompanyName & "Shipments.xlsx")
             SavePath = "\\slfs01\Shared\prasinos\ppexternal\ShipReports\" & CompanyName & "Shipments.xlsx"
             Dim ref As String = RefBase & CNum & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & partfilterstring & "&IBIMR_random = 96021"
             wf.GetReportf(SavePath, ref)
+            Console.WriteLine("DONE")
+            Console.WriteLine("Generating email and recording pull...")
             Dim filelist1 As New List(Of String)
             filelist1.Add(SavePath)
             Dim Subject As String = CompanyName & " Ship Report " & Month(DaytoCheck) & "/" & Day(DaytoCheck) & "/" & Year(DaytoCheck)
@@ -230,14 +220,13 @@ Module Module1
             EmailFile(filelist1, {"monique.desrosiers@magellan.aero ", "kathy.perry@magellan.aero"}, "Please see attached For shipments In the last 90 days." & vbCrLf & vbCrLf & "This Is an automated message.", Subject, , SendOrDisp, False)
             filelist1 = Nothing
             FileIO.FileSystem.WriteAllText("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & CNum & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck), "", False)
+            Console.WriteLine("DONE")
         End If
 
     End Sub
 
     Private Function MakePartFilterString(partarray() As String) As String
-
         Dim PartFilterString As String = "&PARTFILTER=0"
-
         For i = 0 To 4
             PartFilterString = PartFilterString & "&PARTNO" & i + 1 & "=" & partarray(i)
         Next
@@ -245,10 +234,9 @@ Module Module1
     End Function
 
     Function WereShipments(CustNum As String, ShipList()() As String, Optional Partnos As String = "")
+        '################Checks for shipments in a mass pull so that ship reports do not go out on days that no shipments are made##########
         Dim PartCol As Integer = GetColumnNumber(ShipList, "PARTNO")
         Dim CustCol As Integer = GetColumnNumber(ShipList, "CUSTOMER_NO")
-
-
         For x = 1 To ShipList.Length - 1
             If ShipList(x)(CustCol) = CustNum Or InStr(Partnos, ShipList(x)(PartCol), CompareMethod.Text) <> 0 Then Return True
         Next
@@ -257,12 +245,13 @@ Module Module1
     End Function
 
     Sub EmailWeeklyShips(DaytoCheck As Date)
+        '################Weekly shipments include the past 90 days of shipments for a certain customer##########
+
+        'do not double send by checking for file written at end of code
         If FileIO.FileSystem.FileExists("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & "0008267" & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck)) Then Exit Sub
         Dim SavePath As String = "\\slfs01\Shared\prasinos\ppexternal\honshipments\PCCSLShipReport.xlsx"
         Dim ref As String = "http://opsfocus01:8080/ibi_apps/Controller?WORP_REQUEST_TYPE=WORP_LAUNCH_CGI&IBIMR_action=MR_RUN_FEX&IBIMR_domain=qavistes/qavistes.htm&IBIMR_folder=qavistes/qavistes.htm%23salesshipmen&IBIMR_fex=pprasino/shipments_bycustomer.fex&IBIMR_flags=myreport%2CinfoAssist%2Creport%2Croname%3Dqavistes/mrv/shipping_data.fex%2CisFex%3Dtrue%2CrunPowerPoint%3Dtrue&IBIMR_sub_action=MR_MY_REPORT&WORP_MRU=true&&WORP_MPV=ab_gbv&&IBIMR_random=8076&CUSTOMER_NO="
-        'ref = ref & "000B800" & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & "&IBIMR_random=96021"
         Dim partfilterstring As String = MakePartFilterString({"", "", "", "", ""})
-
         wf.GetReportf(SavePath, ref & "000B800" & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & partfilterstring & "&IBIMR_random=96021")
         Dim filelist As New List(Of String)
         filelist.Add(SavePath)
@@ -272,10 +261,6 @@ Module Module1
         wf.GetReportf(SavePath, ref & "0008267" & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & partfilterstring & "&IBIMR_random=96021")
         filelist.Clear() : filelist.Add(SavePath)
         Dim subject As String = "PCCSLShipReport.xlsx"
-
-
-        ' If FindEmails(subject) Then SendOrDisp = False
-
         EmailFile(filelist, {"Sandy.Klein@paradigmprecision.com", "MGREGGS@pccstructurals.com"}, "See attached for shipments from San Leandro." & Chr(10) & Chr(13) & Chr(13) & "This is an automated message.", subject, , SendOrDisp, False)
         FileIO.FileSystem.WriteAllText("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & "0008267" & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck), "", False)
 
@@ -283,13 +268,12 @@ Module Module1
 
 
     Sub EmailScrap()
-
         Dim afterdate As String
         Dim beforedate As String = MakeWebfocusDate(Today)
         Dim Dayrange As String = Today
-        If Today().DayOfWeek = DayOfWeek.Monday Then
+        If Today().DayOfWeek - 1 = DayOfWeek.Monday Then
             Dayrange = Today.AddDays(-2) & " - " & Dayrange
-            afterdate = MakeWebfocusDate(Today.AddDays(-3))
+            afterdate = MakeWebfocusDate(Today.AddDays(-4))
         Else
             afterdate = MakeWebfocusDate(Today.AddDays(-1))
         End If
@@ -306,6 +290,15 @@ Module Module1
         ref = Replace(ref, "&IBIMR_sub_action=MR_MY_REPORT", LogInInfo(2))
         Dim J As String()()
         J = wf.GetReporth(ref)
+        '###########Handle error if no scrap found##############
+        Try
+            Dim s As String = J(0)(0)
+        Catch
+            Console.WriteLine("No Scrap dispositioned between " & beforedate & " & " & afterdate)
+            Exit Sub
+        End Try
+
+
         Dim WCList(0 To 14) As String
         WCList(0) = "    MILESTONE" : WCList(1) = "                Wax" : WCList(2) = "              Invest" : WCList(3) = "                Melt" : WCList(4) = "       Pre-Finish" : WCList(5) = "              Finish" : WCList(6) = "  Pre OSP NDT" : WCList(8) = "                 OSP" : WCList(10) = "        Final NDT" : WCList(13) = "              DOCK"
         WCList(14) = "             TOTAL"
