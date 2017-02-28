@@ -74,10 +74,10 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>A6F876722252162762A38579A01B0F8D2D6D2489</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>BE284E957F793CDF8CEDF0A00D0E6880A864F1AB</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>ScrapReporting_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>ScrapReporting_Key.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -156,6 +156,8 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="App.config" />
+    <None Include="ScrapReporting_1_TemporaryKey.pfx" />
+    <None Include="ScrapReporting_Key.pfx" />
     <None Include="ScrapReporting_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
