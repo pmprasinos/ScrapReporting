@@ -36,10 +36,10 @@ Module Module1
             Loop
 
             If Hour(Now) > 18 Then
-                Console.WriteLine("Checking for daily ship reports for week ending " & Today)
+                Console.WriteLine("Checking for daily ship reports for " & Today)
                 EmailDailyShips(Today)
             Else
-                Console.WriteLine("Checking for daily ship reports for week ending " & Today.AddDays(-1))
+                Console.WriteLine("Checking for daily ship reports for " & Today.AddDays(-1))
                 EmailDailyShips(Today.AddDays(-1))
                 If Today.DayOfWeek = DayOfWeek.Monday Then
                     Console.WriteLine("Checking for weekly ship reports for week ending " & Today.AddDays(-1))
@@ -92,7 +92,7 @@ Module Module1
 
         If (Today.DayOfWeek = DayOfWeek.Monday Or Today.DayOfWeek = DayOfWeek.Thursday) And Not FileIO.FileSystem.FileExists("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & "CC_OSP" & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck)) Then
             Console.Write("Pulling OSP_CC_Orders.xlsx...")
-            SavePath = " \\ slfs01 \shared\prasinos\ppexternal\ShipReports\OSP_CC_Orders.xlsx"
+            SavePath = "\\slfs01 \shared\prasinos\ppexternal\ShipReports\OSP_CC_Orders.xlsx"
             wf.GetReportf(SavePath, "qavistes/qavistes.htm#purchasingre", "kmcclish:kmcclish/osp_pos_open_list_carson_city.fex")
             Console.WriteLine("DONE")
             Console.WriteLine("Generating email and recording pull...")

@@ -898,4 +898,8 @@ ibigblWriteDivs();
 
 --&gt;</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="_1488511341_icon_27_trash_can" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1488511341_icon-27-trash-can.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
