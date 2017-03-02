@@ -902,4 +902,7 @@ ibigblWriteDivs();
   <data name="_1488511341_icon_27_trash_can" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\1488511341_icon-27-trash-can.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="_1488511631_Delete_dustbin_empty_recycle_recycling_remove_trash" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1488511631_Delete_dustbin_empty_recycle_recycling_remove_trash.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

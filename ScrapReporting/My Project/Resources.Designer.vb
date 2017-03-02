@@ -71,6 +71,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        '''</summary>
+        Friend ReadOnly Property _1488511631_Delete_dustbin_empty_recycle_recycling_remove_trash() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("_1488511631_Delete_dustbin_empty_recycle_recycling_remove_trash", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to 1	20154	03302015
         '''2	20155	05042015
         '''3	20156	06012015

@@ -36,7 +36,7 @@
     <ProductName>ScrapReporting</ProductName>
     <PublisherName>Prasinos</PublisherName>
     <MinimumRequiredVersion>1.0.0.133</MinimumRequiredVersion>
-    <ApplicationRevision>134</ApplicationRevision>
+    <ApplicationRevision>136</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -88,6 +88,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\1488511631_Delete_dustbin_empty_recycle_recycling_remove_trash.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
@@ -198,6 +201,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\1488511341_icon-27-trash-can.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1488511631_Delete_dustbin_empty_recycle_recycling_remove_trash.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
