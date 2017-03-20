@@ -5,14 +5,16 @@ Imports System.Text
 Imports System.IO
 Imports System.Data
 Imports VBIDE = Microsoft.Vbe.Interop
-
+Imports System.Threading.Thread
 
 
 Module Module1
+
     Dim ConnectionString As String = "Server=SLREPORT01; Database=WFLocal; User Id=PrasinosApps; Password=Wyman123-;"
     Dim LogInInfo() As String
     Dim wf As New WebfocusModule
     Dim SendOrDisp As Boolean = True
+    Dim ie As SHDocVw.InternetExplorer
 
     Sub Main()
 
@@ -24,76 +26,151 @@ Module Module1
             Months(t) = GetLastMonths(MonthArray, Today, t)
         Next
         ' MakeNoahData(Months, "\\slfs01\shared\data.csv")
-        LogInInfo = GetUserPasswordandFex()
-        wf.LogIn("PPRASINOS", "Wyman123-")
+        ''''''LogInInfo = GetUserPasswordandFex()
+        ''''''wf.LogIn("PPRASINOS", "Wyman123-")
         If Environment.MachineName = "SLPPRASINOSLT01" Then SendOrDisp = False
 
         If Today.DayOfWeek <> DayOfWeek.Saturday And Today.DayOfWeek <> DayOfWeek.Sunday Then
 
-            Do Until wf.IsLoggedIn
-                LogInInfo = GetUserPasswordandFex()
-                wf.LogIn(LogInInfo(0), LogInInfo(1))
-            Loop
+            ''''''Do Until wf.IsLoggedIn
+            ''''''LogInInfo = GetUserPasswordandFex()
+            ''''''wf.LogIn(LogInInfo(0), LogInInfo(1))
+            ''''''Loop
 
             If Hour(Now) > 18 Then
                 Console.WriteLine("Checking for daily ship reports for " & Today)
                 EmailDailyShips(Today)
-            Else
+            ElseIf Hour(Now) < 10 Then
                 Console.WriteLine("Checking for daily ship reports for " & Today.AddDays(-1))
-                EmailDailyShips(Today.AddDays(-1))
-                If Today.DayOfWeek = DayOfWeek.Monday Then
-                    Console.WriteLine("Checking for weekly ship reports for week ending " & Today.AddDays(-1))
-                    EmailWeeklyShips(Today.AddDays(-1))
-                End If
                 If Not FileIO.FileSystem.FileExists("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & "scrap" & Month(Now) & "-" & Day(Now) & "-" & Year(Now)) Then
                     Console.WriteLine("Executing scrap report pull/mailing for " & Today)
                     EmailScrap()
                 End If
+
+                EmailDailyShips(Today.AddDays(-1))
+
+                If Today.DayOfWeek = DayOfWeek.Monday Then
+                    Console.WriteLine("Checking for weekly ship reports for week ending " & Today.AddDays(-1))
+                    EmailWeeklyShips(Today.AddDays(-1))
+                End If
+
                 FileIO.FileSystem.WriteAllText("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & "scrap" & Month(Now) & "-" & Day(Now) & "-" & Year(Now), "", True)
 
             End If
 
-        ElseIf Today.DayOfWeek = DayOfWeek.Sunday Then
+        ElseIf Today.DayOfWeek = DayOfWeek.Sunday And Hour(Now) > 18 Then
             Console.WriteLine("Checking for weekly ship reports for week ending " & Today)
             EmailWeeklyShips(Today)
-
+        ElseIf Today.DayOfWeek = DayOfWeek.Saturday Then
+            EmailDailyShips(Today.AddDays(-1))
         End If
 
     End Sub
 
+    Private Function GetWFReport(ref As String) As String()()
+        Debug.Print(ref)
+        Debug.Print("")
+        Dim doc As mshtml.HTMLDocument
+        Try
+            If IsNothing(ie) Then
+                ie = New SHDocVw.InternetExplorerMedium
+                ie.Visible = True
+                ie.Navigate("http://webfocus/ibi_apps/signin")
+                For X = 0 To 10
+                    Do Until ie.Busy = False And ie.ReadyState = 4 : Sleep(10) : Loop : Sleep(50)
+                Next X
+                doc = ie.Document
+                doc.getElementById("SignonUserName").innerText = "gen_slan-8ball"
+                doc.getElementById("SignonPassName").innerText = "Password17"
+                doc.getElementById("SignonbtnLoginID").click()
+                For x = 0 To 10
+                    Do Until ie.Busy = False And ie.ReadyState = 4 : Sleep(100) : Loop : Sleep(50)
+                Next x
 
-    Public Function GetUserPasswordandFex() As String()
-        Dim h As New Random
-        Dim Usernames() As String = {"hfaizi", "mreyes", "MALMARAZ", "MARJMAND", "HYANG", "GWONG", "VDELACRUZ", "JTIBAYAN", "JSOLIS", "ASINGH", "GREYES", "JPIMENTEL", "TOSULLIVAN", "MMARTIN", "VLOPEZ", "SLI", "JIMPERIAL", "JHERNANDEZ", "FHARO", "CGOUTAMA", "HGOMEZ", "EGONZALEZ", "CDAROSA"}
-        Dim y As Integer = h.Next(0, Usernames.Length)
-        Dim ps As String
-        Dim FexAdd As String = "&IBIMR_sub_action=MR_MY_REPORT"
-        If Usernames(y) <> "pprasinos" Then
-            FexAdd = "&IBIMR_sub_action=MR_MY_REPORT&IBIMR_proxy_id=pprasino.htm&"
-            ps = ChrW(112) & ChrW(97) & ChrW(115) & ChrW(115) & ChrW(50) & ChrW(48) & ChrW(49) & ChrW(53)
-        Else
-            ps = ChrW(87) & ChrW(121) & ChrW(109) & ChrW(97) & ChrW(110) & ChrW(49) & ChrW(50) & ChrW(51) & ChrW(45)
-        End If
-        Debug.Print(Usernames(y))
-        Return {Usernames(y), ps, FexAdd}
+            End If
+
+            ie.Navigate(ref)
+            For X = 0 To 10
+                Do Until ie.Busy = False And ie.ReadyState = 4 : Sleep(10) : Loop : Sleep(50)
+            Next X
+
+            doc = ie.Document
+            Dim i As Integer = 0
+            Debug.Print(doc.all.length)
+            If doc.all.length < 100 Then
+                Do While i < doc.all.length
+                    Dim element As Object = doc.all(i)
+                    Try
+                        If Not IsNothing(element.innerhtml) Then
+                            'If Not IsNothing(element.id) Then Debug.Print("ID:  " & element.id)
+                            ' If Not IsNothing(element.title) Then Debug.Print("TITLE:  " & element.title)
+                            If InStr(element.innerhtml, "win.document.form1.action = ") > 0 Then
+                                Dim RepURL As String = "http://webfocus" & Split(Split(element.innerhtml, "win.document.form1.action = " & Chr(34))(1), Chr(34) & ";")(0)
+                                Debug.Print(RepURL)
+                                ie.Navigate(RepURL)
+                                For x = 0 To 10
+                                    Do Until ie.Busy = False And ie.ReadyState = 4 : Sleep(100) : Loop : Sleep(50)
+                                Next x
+
+                                i = 100000
+                            End If
+                        End If
+                    Catch
+                    End Try
+                    i = i + 1
+                Loop
+            End If
+            For x = 0 To 10
+                Do Until ie.Busy = False And ie.ReadyState = 4 : Sleep(100) : Loop : Sleep(50)
+            Next x
+
+            doc = ie.Document
+            Dim doc1 As String = doc.body.outerHTML
+            ' IE.Quit()
+            'IE = Nothing
+            Return ClassLibrary1.HTMLProcessor.ParseHtml(doc1)
+        Catch
+            ie.Visible = True
+        End Try
+
     End Function
+
+    'Public Function GetUserPasswordandFex() As String()
+    '    Dim h As New Random
+    '    Dim Usernames() As String = {"hfaizi", "mreyes", "MALMARAZ", "MARJMAND", "HYANG", "GWONG", "VDELACRUZ", "JTIBAYAN", "JSOLIS", "ASINGH", "GREYES", "JPIMENTEL", "TOSULLIVAN", "MMARTIN", "VLOPEZ", "SLI", "JIMPERIAL", "JHERNANDEZ", "FHARO", "CGOUTAMA", "HGOMEZ", "EGONZALEZ", "CDAROSA"}
+    '    Dim y As Integer = h.Next(0, Usernames.Length)
+    '    Dim ps As String
+    '    Dim FexAdd As String = "&IBIMR_sub_action=MR_MY_REPORT"
+    '    If Usernames(y) <> "pprasinos" Then
+    '        FexAdd = "&IBIMR_sub_action=MR_MY_REPORT&IBIMR_proxy_id=pprasino.htm&"
+    '        ps = ChrW(112) & ChrW(97) & ChrW(115) & ChrW(115) & ChrW(50) & ChrW(48) & ChrW(49) & ChrW(53)
+    '    Else
+    '        ps = ChrW(87) & ChrW(121) & ChrW(109) & ChrW(97) & ChrW(110) & ChrW(49) & ChrW(50) & ChrW(51) & ChrW(45)
+    '    End If
+    '    Debug.Print(Usernames(y))
+    '    Return {Usernames(y), ps, FexAdd}
+    'End Function
 
 
 
     Sub EmailDailyShips(DaytoCheck As Date)
         '##############NOTES ON DEFAULT SHIP REPORT ON CNUM = "0003523" ~line 167###############
         Dim SavePath As String
-        Dim RefBase As String = "http://opsfocus01:8080/ibi_apps/Controller?WORP_REQUEST_TYPE=WORP_LAUNCH_CGI&IBIMR_action=MR_RUN_FEX&IBIMR_domain=qavistes/qavistes.htm&IBIMR_folder=qavistes/qavistes.htm%23salesshipmen&IBIMR_fex=pprasino/shipments_bycustomer.fex&IBIMR_flags=myreport%2CinfoAssist%2Creport%2Croname%3Dqavistes/mrv/shipping_data.fex%2CisFex%3Dtrue%2CrunPowerPoint%3Dtrue&IBIMR_sub_action=MR_MY_REPORT&WORP_MRU=true&&WORP_MPV=ab_gbv&&IBIMR_random=8076&CUSTOMER_NO="
-        RefBase = Replace(RefBase, "&IBIMR_sub_action=MR_MY_REPORT", LogInInfo(2))
+        Dim RefBase As String = "http://webfocus/ibi_apps/run.bip?BIP_REQUEST_TYPE=BIP_RUN&BIP_folder=IBFS%253A%252FWFC%252FRepository%252Fqavistes%252F~pprasinos%252Fsalesshipmen&BIP_item=shipments_bycustomer.fex&WF_STYLE_HEIGHT=560&WF_STYLE_WIDTH=992&WF_STYLE_UNITS=PIXELS&IBIWF_redirNewWindow=true&WF_STYLE=IBFS%3A%2FFILE%2FIBI_HTML_DIR%2Fjavaassist%2Fintl%2FEN%2Fcombine_templates%2FENInformationBuilders_Medium1.sty&WF_THEME=BIPFlat&BIP_CACHE=100000&CUSTOMER_NO="
+        '''''' Dim RefBase As String = "http://opsfocus01:8080/ibi_apps/Controller?WORP_REQUEST_TYPE=WORP_LAUNCH_CGI&IBIMR_action=MR_RUN_FEX&IBIMR_domain=qavistes/qavistes.htm&IBIMR_folder=qavistes/qavistes.htm%23salesshipmen&IBIMR_fex=pprasino/shipments_bycustomer.fex&IBIMR_flags=myreport%2CinfoAssist%2Creport%2Croname%3Dqavistes/mrv/shipping_data.fex%2CisFex%3Dtrue%2CrunPowerPoint%3Dtrue&IBIMR_sub_action=MR_MY_REPORT&WORP_MRU=true&&WORP_MPV=ab_gbv&&IBIMR_random=8076&CUSTOMER_NO="
+        '''''' RefBase = Replace(RefBase, "&IBIMR_sub_action=MR_MY_REPORT", LogInInfo(2))
         Dim j As New Object
         Dim CNum As String
         Dim LastDay As String = MakeWebfocusDate(Today.AddDays(0))
-        j = wf.GetReporth(Replace("http://opsfocus01:8080/ibi_apps/Controller?WORP_REQUEST_TYPE=WORP_LAUNCH_CGI&IBIMR_action=MR_RUN_FEX&IBIMR_domain=qavistes/qavistes.htm&IBIMR_folder=qavistes/qavistes.htm%23salesshipmen&IBIMR_fex=pprasino/capshipments.fex&IBIMR_flags=myreport%2CinfoAssist%2Creport%2Croname%3Dqavistes/mrv/shipping_data.fex%2CisFex%3Dtrue%2CrunPowerPoint%3Dtrue&IBIMR_sub_action=MR_MY_REPORT&WORP_MRU=true&&WORP_MPV=ab_gbv&GESHIPPED_D=" & LastDay & "&LESHIPPED_D=" & LastDay & "&IBIMR_random=44423&", "&IBIMR_sub_action=MR_MY_REPORT", LogInInfo(2)))
+        GetWFReportF("C:\users\pprasinos\desktop\file.csv", "http://webfocus/ibi_apps/run.bip?BIP_REQUEST_TYPE=BIP_RUN&BIP_folder=IBFS%253A%252FWFC%252FRepository%252Fqavistes%252F~pprasinos%252Fsalesshipmen&BIP_item=capshipments.fex&WF_STYLE_HEIGHT=560&WF_STYLE_WIDTH=992&WF_STYLE_UNITS=PIXELS&IBIWF_redirNewWindow=true&WF_STYLE=IBFS%3A%2FFILE%2FIBI_HTML_DIR%2Fjavaassist%2Fintl%2FEN%2Fcombine_templates%2FENInformationBuilders_Medium1.sty&WF_THEME=BIPFlat&BIP_CACHE=100000&GESHIPPED_D=" & LastDay & "&LESHIPPED_D=" & LastDay & "&BIP_rand=90934")
+        ''''''j = wf.GetReporth(Replace("http://opsfocus01:8080/ibi_apps/Controller?WORP_REQUEST_TYPE=WORP_LAUNCH_CGI&IBIMR_action=MR_RUN_FEX&IBIMR_domain=qavistes/qavistes.htm&IBIMR_folder=qavistes/qavistes.htm%23salesshipmen&IBIMR_fex=pprasino/capshipments.fex&IBIMR_flags=myreport%2CinfoAssist%2Creport%2Croname%3Dqavistes/mrv/shipping_data.fex%2CisFex%3Dtrue%2CrunPowerPoint%3Dtrue&IBIMR_sub_action=MR_MY_REPORT&WORP_MRU=true&&WORP_MPV=ab_gbv&GESHIPPED_D=" & LastDay & "&LESHIPPED_D=" & LastDay & "&IBIMR_random=44423&", "&IBIMR_sub_action=MR_MY_REPORT", LogInInfo(2)))
+        j = GetWFReport("http://webfocus/ibi_apps/run.bip?BIP_REQUEST_TYPE=BIP_RUN&BIP_folder=IBFS%253A%252FWFC%252FRepository%252Fqavistes%252F~pprasinos%252Fsalesshipmen&BIP_item=capshipments.fex&WF_STYLE_HEIGHT=560&WF_STYLE_WIDTH=992&WF_STYLE_UNITS=PIXELS&IBIWF_redirNewWindow=true&WF_STYLE=IBFS%3A%2FFILE%2FIBI_HTML_DIR%2Fjavaassist%2Fintl%2FEN%2Fcombine_templates%2FENInformationBuilders_Medium1.sty&WF_THEME=BIPFlat&BIP_CACHE=100000&GESHIPPED_D=" & LastDay & "&LESHIPPED_D=" & LastDay & "&BIP_rand=90934")
 
         If (Today.DayOfWeek = DayOfWeek.Monday Or Today.DayOfWeek = DayOfWeek.Thursday) And Not FileIO.FileSystem.FileExists("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & "CC_OSP" & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck)) Then
             Console.Write("Pulling OSP_CC_Orders.xlsx...")
-            SavePath = "\\slfs01 \shared\prasinos\ppexternal\ShipReports\OSP_CC_Orders.xlsx"
-            wf.GetReportf(SavePath, "qavistes/qavistes.htm#purchasingre", "kmcclish:kmcclish/osp_pos_open_list_carson_city.fex")
+            SavePath = "\\slfs01\shared\prasinos\ppexternal\ShipReports\OSP_CC_Orders.csv"
+            ''''''wf.GetReportf(SavePath, "qavistes/qavistes.htm#purchasingre", "kmcclish:kmcclish/osp_pos_open_list_carson_city.fex")
+            GetWFReportF(SavePath, "http://webfocus/ibi_apps/run.bip?BIP_REQUEST_TYPE=BIP_RUN&BIP_folder=IBFS%253A%252FWFC%252FRepository%252Fqavistes%252F~pprasinos%252Fpurchasingre&BIP_item=osp_pos_open_list__mcclishmodified.fex&WF_STYLE_HEIGHT=560&WF_STYLE_WIDTH=992&WF_STYLE_UNITS=PIXELS&IBIWF_redirNewWindow=true&WF_STYLE=IBFS%3A%2FFILE%2FIBI_HTML_DIR%2Fjavaassist%2Fintl%2FEN%2Fcombine_templates%2FENInformationBuilders_Medium1.sty&WF_THEME=BIPFlat&BIP_CACHE=100000&BIP_rand=95915")
             Console.WriteLine("DONE")
             Console.WriteLine("Generating email and recording pull...")
             Dim filelist As New List(Of String)
@@ -105,9 +182,10 @@ Module Module1
         End If
 
         If WereShipments("0003917", j) And Not FileIO.FileSystem.FileExists("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & "0003917" & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck)) Then
-            Console.Write("Pulling HonywellShipments.xlsx...")
-            SavePath = "\\slfs01\shared\prasinos\ppexternal\ShipReports\HonywellShipments.xlsx"
-            wf.GetReportf(SavePath, Replace("http://opsfocus01:8080/ibi_apps/Controller?WORP_REQUEST_TYPE=WORP_LAUNCH_CGI&IBIMR_action=MR_RUN_FEX&IBIMR_domain=qavistes/qavistes.htm&IBIMR_folder=qavistes/qavistes.htm%23salesshipmen&IBIMR_fex=pprasino/shipping_data1.fex&IBIMR_flags=myreport%2CinfoAssist%2Creport%2Croname%3Dqavistes/mrv/shipping_data.fex%2CisFex%3Dtrue%2CrunPowerPoint%3Dtrue&IBIMR_sub_action=MR_MY_REPORT&WORP_MRU=true&&WORP_MPV=public&&IBIMR_random=6427&", "&IBIMR_sub_action=MR_MY_REPORT", LogInInfo(2)))
+            Console.Write("Pulling HonywellShipments.csv...")
+            SavePath = "\\slfs01\shared\prasinos\ppexternal\ShipReports\HonywellShipments.csv"
+            '''''wf.GetReportf(SavePath, Replace("http://opsfocus01:8080/ibi_apps/Controller?WORP_REQUEST_TYPE=WORP_LAUNCH_CGI&IBIMR_action=MR_RUN_FEX&IBIMR_domain=qavistes/qavistes.htm&IBIMR_folder=qavistes/qavistes.htm%23salesshipmen&IBIMR_fex=pprasino/shipping_data1.fex&IBIMR_flags=myreport%2CinfoAssist%2Creport%2Croname%3Dqavistes/mrv/shipping_data.fex%2CisFex%3Dtrue%2CrunPowerPoint%3Dtrue&IBIMR_sub_action=MR_MY_REPORT&WORP_MRU=true&&WORP_MPV=public&&IBIMR_random=6427&", "&IBIMR_sub_action=MR_MY_REPORT", LogInInfo(2)))
+            GetWFReportF(SavePath, "http://webfocus/ibi_apps/run.bip?BIP_REQUEST_TYPE=BIP_RUN&BIP_folder=IBFS%253A%252FWFC%252FRepository%252Fqavistes%252F~pprasinos%252Fsalesshipmen&BIP_item=shipping_data1.fex&WF_STYLE_HEIGHT=560&WF_STYLE_WIDTH=992&WF_STYLE_UNITS=PIXELS&IBIWF_redirNewWindow=true&WF_STYLE=IBFS%3A%2FFILE%2FIBI_HTML_DIR%2Fjavaassist%2Fintl%2FEN%2Fcombine_templates%2FENInformationBuilders_Medium1.sty&WF_THEME=BIPFlat&BIP_CACHE=100000&BIP_rand=7113")
             Console.WriteLine("DONE")
             Console.WriteLine("Generating email and recording pull...")
             Dim filelist As New List(Of String)
@@ -125,8 +203,9 @@ Module Module1
             Dim PartFilterString As String = MakePartFilterString({"1", "1", "1", "1", "1"})
             Dim ref As String = RefBase & CNum & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & PartFilterString & "&IBIMR_random = 96021"
             Dim CompanyName As String = "NHBB"
-            SavePath = "\\slfs01\Shared\prasinos\ppexternal\ShipReports\" & CompanyName & "Shipments.xlsx"
-            wf.GetReportf(SavePath, ref)
+            SavePath = "\\slfs01\Shared\prasinos\ppexternal\ShipReports\" & CompanyName & "Shipments.csv"
+            ''''''wf.GetReportf(SavePath, ref)
+            GetWFReportF(SavePath, ref)
             Console.WriteLine("DONE")
             Console.WriteLine("Generating email and recording pull...")
             Dim filelist1 As New List(Of String)
@@ -144,9 +223,10 @@ Module Module1
             Dim partfilterstring As String = MakePartFilterString({"Q0191", "Q0192", "Q0193", "Q0194", "1"})
             Dim ref As String = RefBase & CNum & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & partfilterstring & "&IBIMR_random = 96021"
             Dim CompanyName As String = "PCC"
-            SavePath = "\\slfs01\Shared\prasinos\ppexternal\ShipReports\PCC_Shipments.xlsx"
-            Console.Write("Pulling PCCShipments.xlsx")
-            wf.GetReportf(SavePath, ref)
+            SavePath = "\\slfs01\Shared\prasinos\ppexternal\ShipReports\PCC_Shipments.csv"
+            Console.Write("Pulling PCCShipments.csv")
+            ''''''wf.GetReportf(SavePath, ref)
+            GetWFReportF(SavePath, ref)
             Console.WriteLine("DONE")
             Console.WriteLine("Generating email and recording pull...")
             Dim filelist1 As New List(Of String)
@@ -165,10 +245,11 @@ Module Module1
             Dim partfilterstring As String = MakePartFilterString({"", "", "", "", "1"})
             '#############CompanyName is used to uniquely name the file##############
             Dim CompanyName As String = "ExoticMetals"
-            SavePath = "\\slfs01\Shared\prasinos\ppexternal\ShipReports\" & CompanyName & "Shipments.xlsx"
+            SavePath = "\\slfs01\Shared\prasinos\ppexternal\ShipReports\" & CompanyName & "Shipments.csv"
             Dim ref As String = RefBase & CNum & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & partfilterstring & "&IBIMR_random = 96021"
-            Console.Write("Pulling " & CompanyName & "Shipments.xlsx")
-            wf.GetReportf(SavePath, ref)
+            Console.Write("Pulling " & CompanyName & "Shipments.csv")
+            ''''''wf.GetReportf(SavePath, ref)
+            GetWFReportF(SavePath, ref)
             Console.WriteLine("DONE")
             Console.WriteLine("Generating email and recording pull...")
             Dim filelist1 As New List(Of String)
@@ -187,15 +268,15 @@ Module Module1
             Dim partfilterstring As String = MakePartFilterString({"", "", "", "", "1"})
             Dim CompanyName As String = "SpaceX"
             Console.Write("Pulling " & CompanyName & "Shipments.xlsx")
-            SavePath = "\\slfs01\Shared\prasinos\ppexternal\ShipReports\" & CompanyName & "Shipments.xlsx"
+            SavePath = "\\slfs01\Shared\prasinos\ppexternal\ShipReports\" & CompanyName & "Shipments.csv"
             Dim ref As String = RefBase & CNum & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & partfilterstring & "&IBIMR_random = 96021"
-            wf.GetReportf(SavePath, ref)
+            ''''''wf.GetReportf(SavePath, ref)
+            GetWFReportF(SavePath, ref)
             Console.WriteLine("DONE")
             Console.WriteLine("Generating email and recording pull...")
             Dim filelist1 As New List(Of String)
             filelist1.Add(SavePath)
             Dim Subject As String = CompanyName & " Ship Report " & Month(DaytoCheck) & "/" & Day(DaytoCheck) & "/" & Year(DaytoCheck)
-            ' If FindEmails(Subject) Then SendOrDisp = False
             EmailFile(filelist1, {"Andrew.Paulsen@spacex.com", "Jennifer.Guey@spacex.com", "jjudson@pccstructurals.com"}, "Please see attached For shipments In the last 90 days." & vbCrLf & vbCrLf & "This Is an automated message.", Subject, , SendOrDisp, False)
             filelist1 = Nothing
             FileIO.FileSystem.WriteAllText("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & CNum & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck), "", False)
@@ -207,22 +288,34 @@ Module Module1
 
             Dim partfilterstring As String = MakePartFilterString({"", "", "", "", "1"})
             Dim CompanyName As String = "Magellan"
-            Console.Write("Pulling " & CompanyName & "Shipments.xlsx")
-            SavePath = "\\slfs01\Shared\prasinos\ppexternal\ShipReports\" & CompanyName & "Shipments.xlsx"
-            Dim ref As String = RefBase & CNum & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & partfilterstring & "&IBIMR_random = 96021"
-            wf.GetReportf(SavePath, ref)
+            Console.Write("Pulling " & CompanyName & "Shipments.csv")
+            SavePath = "\\slfs01\Shared\prasinos\ppexternal\ShipReports\" & CompanyName & "Shipments.csv"
+            Dim ref As String = RefBase & CNum & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & partfilterstring
+            ''''''wf.GetReportf(SavePath, ref)
+            GetWFReportF(SavePath, ref)
             Console.WriteLine("DONE")
             Console.WriteLine("Generating email and recording pull...")
             Dim filelist1 As New List(Of String)
             filelist1.Add(SavePath)
             Dim Subject As String = CompanyName & " Ship Report " & Month(DaytoCheck) & "/" & Day(DaytoCheck) & "/" & Year(DaytoCheck)
-            'If FindEmails(Subject) Then SendOrDisp = False
             EmailFile(filelist1, {"monique.desrosiers@magellan.aero ", "kathy.perry@magellan.aero"}, "Please see attached For shipments In the last 90 days." & vbCrLf & vbCrLf & "This Is an automated message.", Subject, , SendOrDisp, False)
             filelist1 = Nothing
             FileIO.FileSystem.WriteAllText("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & CNum & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck), "", False)
             Console.WriteLine("DONE")
         End If
 
+    End Sub
+
+    Private Sub GetWFReportF(SavePath As String, ref As String)
+        Dim j As String()() = GetWFReport(ref)
+        Dim outstring As String = ""
+        For x = 0 To j.Length - 1
+            For y = 0 To j(0).Length - 1
+                outstring = outstring & Replace(j(x)(y), ",", "") & ","
+            Next y
+            outstring = outstring & vbCrLf
+        Next x
+        FileIO.FileSystem.WriteAllText(SavePath, outstring, False)
     End Sub
 
     Private Function MakePartFilterString(partarray() As String) As String
@@ -249,18 +342,22 @@ Module Module1
 
         'do not double send by checking for file written at end of code
         If FileIO.FileSystem.FileExists("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & "0008267" & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck)) Then Exit Sub
-        Dim SavePath As String = "\\slfs01\Shared\prasinos\ppexternal\honshipments\PCCSLShipReport.xlsx"
-        Dim ref As String = "http://opsfocus01:8080/ibi_apps/Controller?WORP_REQUEST_TYPE=WORP_LAUNCH_CGI&IBIMR_action=MR_RUN_FEX&IBIMR_domain=qavistes/qavistes.htm&IBIMR_folder=qavistes/qavistes.htm%23salesshipmen&IBIMR_fex=pprasino/shipments_bycustomer.fex&IBIMR_flags=myreport%2CinfoAssist%2Creport%2Croname%3Dqavistes/mrv/shipping_data.fex%2CisFex%3Dtrue%2CrunPowerPoint%3Dtrue&IBIMR_sub_action=MR_MY_REPORT&WORP_MRU=true&&WORP_MPV=ab_gbv&&IBIMR_random=8076&CUSTOMER_NO="
+        Dim SavePath As String = "\\slfs01\Shared\prasinos\ppexternal\honshipments\PCCSLShipReport.CSV"
+        ''''''Dim SavePath As String = "\\slfs01\Shared\prasinos\ppexternal\honshipments\PCCSLShipReport.xlsx"
+        ''''''Dim ref As String = "http://opsfocus01:8080/ibi_apps/Controller?WORP_REQUEST_TYPE=WORP_LAUNCH_CGI&IBIMR_action=MR_RUN_FEX&IBIMR_domain=qavistes/qavistes.htm&IBIMR_folder=qavistes/qavistes.htm%23salesshipmen&IBIMR_fex=pprasino/shipments_bycustomer.fex&IBIMR_flags=myreport%2CinfoAssist%2Creport%2Croname%3Dqavistes/mrv/shipping_data.fex%2CisFex%3Dtrue%2CrunPowerPoint%3Dtrue&IBIMR_sub_action=MR_MY_REPORT&WORP_MRU=true&&WORP_MPV=ab_gbv&&IBIMR_random=8076&CUSTOMER_NO="
+        Dim ref As String = "http://webfocus/ibi_apps/run.bip?BIP_REQUEST_TYPE=BIP_RUN&BIP_folder=IBFS%253A%252FWFC%252FRepository%252Fqavistes%252F~pprasinos%252Fsalesshipmen&BIP_item=shipments_bycustomer.fex&WF_STYLE_HEIGHT=560&WF_STYLE_WIDTH=992&WF_STYLE_UNITS=PIXELS&IBIWF_redirNewWindow=true&WF_STYLE=IBFS%3A%2FFILE%2FIBI_HTML_DIR%2Fjavaassist%2Fintl%2FEN%2Fcombine_templates%2FENInformationBuilders_Medium1.sty&WF_THEME=BIPFlat&BIP_CACHE=100000&CUSTOMER_NO="
         Dim partfilterstring As String = MakePartFilterString({"", "", "", "", ""})
-        wf.GetReportf(SavePath, ref & "000B800" & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & partfilterstring & "&IBIMR_random=96021")
+        ''''''wf.GetReportf(SavePath, ref & "000B800" & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & partfilterstring & "&IBIMR_random=96021")
+        GetWFReportF(SavePath, ref & "000B800" & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & partfilterstring)
         Dim filelist As New List(Of String)
         filelist.Add(SavePath)
         Debug.Print(Day(DaytoCheck))
-        EmailFile(filelist, {"Robert.Klimza@ge.com", "mgreggs@pccstructurals.com"}, "See attached for shipments from San Leandro." & Chr(10) & Chr(13) & Chr(13) & "This is an automated message.", "PCCSLShipReport.xlsx", , True, False)
+        EmailFile(filelist, {"Robert.Klimza@ge.com", "mgreggs@pccstructurals.com"}, "See attached for shipments from San Leandro." & Chr(10) & Chr(13) & Chr(13) & "This is an automated message.", "PCCSLShipReport.csv", , True, False)
         FileIO.FileSystem.DeleteFile(SavePath)
-        wf.GetReportf(SavePath, ref & "0008267" & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & partfilterstring & "&IBIMR_random=96021")
+        ''''''wf.GetReportf(SavePath, ref & "0008267" & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & partfilterstring & "&IBIMR_random=96021")
+        GetWFReportF(SavePath, ref & "0008267" & "&SHIPPED_D=" & MakeWebfocusDate(Today.AddDays(-90)) & partfilterstring)
         filelist.Clear() : filelist.Add(SavePath)
-        Dim subject As String = "PCCSLShipReport.xlsx"
+        Dim subject As String = "PCCSLShipReport.csv"
         EmailFile(filelist, {"Sandy.Klein@paradigmprecision.com", "MGREGGS@pccstructurals.com"}, "See attached for shipments from San Leandro." & Chr(10) & Chr(13) & Chr(13) & "This is an automated message.", subject, , SendOrDisp, False)
         FileIO.FileSystem.WriteAllText("\\slfs01\shared\prasinos\ppexternal\ShipReports\" & "0008267" & Month(DaytoCheck) & "-" & Day(DaytoCheck) & "-" & Year(DaytoCheck), "", False)
 
@@ -271,25 +368,27 @@ Module Module1
         Dim afterdate As String
         Dim beforedate As String = MakeWebfocusDate(Today)
         Dim Dayrange As String = Today
-        If Today().DayOfWeek - 1 = DayOfWeek.Monday Then
+        If Today().DayOfWeek = DayOfWeek.Monday Then
             Dayrange = Today.AddDays(-2) & " - " & Dayrange
-            afterdate = MakeWebfocusDate(Today.AddDays(-4))
+            afterdate = MakeWebfocusDate(Today.AddDays(-3))
         Else
             afterdate = MakeWebfocusDate(Today.AddDays(-1))
         End If
 
         Dim filelist2 As New List(Of String)
-        filelist2.Add("\\slfs01\shared\prasinos\ppexternal\downloads\PendingScrapReport.xlsx")
-        wf.GetReportf("\\slfs01\shared\prasinos\ppexternal\downloads\PendingScrapReport.xlsx", "qavistes/qavistes.htm#scrapdatatqg", "pprasinos:pprasino/pending_scrap_reportxls.fex")
+        filelist2.Add("\\slfs01\shared\prasinos\ppexternal\downloads\PendingScrapReport.csv")
+        ''''''wf.GetReportf("\\slfs01\shared\prasinos\ppexternal\downloads\PendingScrapReport.xlsx", "qavistes/qavistes.htm#scrapdatatqg", "pprasinos:pprasino/pending_scrap_reportxls.fex")
+        GetWFReportF("\\slfs01\shared\prasinos\ppexternal\downloads\PendingScrapReport.csv", "http://webfocus/ibi_apps/run.bip?BIP_REQUEST_TYPE=BIP_RUN&BIP_folder=IBFS%253A%252FWFC%252FRepository%252Fqavistes%252F~pprasinos%252Fscrapdatatqg&BIP_item=pending_scrap_reportxls.fex&WF_STYLE_HEIGHT=560&WF_STYLE_WIDTH=992&WF_STYLE_UNITS=PIXELS&IBIWF_redirNewWindow=true&WF_STYLE=IBFS%3A%2FFILE%2FIBI_HTML_DIR%2Fjavaassist%2Fintl%2FEN%2Fcombine_templates%2FENInformationBuilders_Medium1.sty&WF_THEME=BIPFlat&BIP_CACHE=100000&BIP_rand=84644")
         Dim recp2 As String()
         recp2 = Split("ddelprete; rricherson; nhansen; GGottfried", "; ")
         EmailFile(filelist2, recp2, "See attached for report of Pending Scrap ", "Pending Scrap" & Dayrange, , SendOrDisp)
 
-
-        Dim ref As String = "http://opsfocus01:8080/ibi_apps/Controller?WORP_REQUEST_TYPE=WORP_LAUNCH_CGI&IBIMR_action=MR_RUN_FEX&IBIMR_domain=qavistes/qavistes.htm&IBIMR_folder=qavistes/qavistes.htm%23scrapdatatqg&IBIMR_fex=pprasino/scrap_report.fex&IBIMR_flags=myreport%2CinfoAssist%2Creport%2Croname%3Dqavistes/mrv/scrap_data.fex%2CisFex%3Dtrue%2CrunPowerPoint%3Dtrue&IBIMR_sub_action=MR_MY_REPORT&WORP_MRU=true&&WORP_MPV=ab_gbv&DISP_D=" & afterdate & "&LEDISP_D=" & beforedate & "&IBIMR_random=96021"
-        ref = Replace(ref, "&IBIMR_sub_action=MR_MY_REPORT", LogInInfo(2))
+        ''''''Dim ref As String = "http://opsfocus01:8080/ibi_apps/Controller?WORP_REQUEST_TYPE=WORP_LAUNCH_CGI&IBIMR_action=MR_RUN_FEX&IBIMR_domain=qavistes/qavistes.htm&IBIMR_folder=qavistes/qavistes.htm%23scrapdatatqg&IBIMR_fex=pprasino/scrap_report.fex&IBIMR_flags=myreport%2CinfoAssist%2Creport%2Croname%3Dqavistes/mrv/scrap_data.fex%2CisFex%3Dtrue%2CrunPowerPoint%3Dtrue&IBIMR_sub_action=MR_MY_REPORT&WORP_MRU=true&&WORP_MPV=ab_gbv&DISP_D=" & afterdate & "&LEDISP_D=" & beforedate & "&IBIMR_random=96021"
+        Dim ref As String = "http://webfocus/ibi_apps/run.bip?BIP_REQUEST_TYPE=BIP_RUN&BIP_folder=IBFS%253A%252FWFC%252FRepository%252Fqavistes%252F~pprasinos%252Fscrapdatatqg&BIP_item=scrap_report.fex&WF_STYLE_HEIGHT=532&WF_STYLE_WIDTH=1040&WF_STYLE_UNITS=PIXELS&IBIWF_redirNewWindow=true&WF_STYLE=IBFS%3A%2FFILE%2FIBI_HTML_DIR%2Fjavaassist%2Fintl%2FEN%2Fcombine_templates%2FENInformationBuilders_Medium1.sty&WF_THEME=BIPFlat&DISP_D=" & afterdate & "&LEDISP_D=" & beforedate & ""
+        ''''''ref = Replace(ref, "&IBIMR_sub_action=MR_MY_REPORT", LogInInfo(2))
         Dim J As String()()
-        J = wf.GetReporth(ref)
+        ''''''J = wf.GetReporth(ref)
+        J = GetWFReport(ref)
         '###########Handle error if no scrap found##############
         Try
             Dim s As String = J(0)(0)
@@ -411,78 +510,78 @@ Module Module1
 
     End Sub
 
-    Function MakeNoahData(months() As String, outfile As String)
-        Dim st As String = ""
-        For q = 0 To 5
-            Dim afterdate As String
-            Dim beforedate As String
-            Dim Dayrange As String
+    ''''''    Function MakeNoahData(months() As String, outfile As String)
+    ''''''        Dim st As String = ""
+    ''''''        For q = 0 To 5
+    ''''''            Dim afterdate As String
+    ''''''            Dim beforedate As String
+    ''''''            Dim Dayrange As String
 
-            afterdate = months(q)
-            If q = 0 Then
-                beforedate = MakeWebfocusDate(Today)
-            Else
-                beforedate = months(q - 1)
-            End If
+    ''''''            afterdate = months(q)
+    ''''''            If q = 0 Then
+    ''''''                beforedate = MakeWebfocusDate(Today)
+    ''''''            Else
+    ''''''                beforedate = months(q - 1)
+    ''''''            End If
 
-            Dayrange = Today.AddDays(-1)
+    ''''''            Dayrange = Today.AddDays(-1)
 
-            Debug.Print(q)
+    ''''''            Debug.Print(q)
 
-            Dim ref As String = "http://opsfocus01:8080/ibi_apps/Controller?WORP_REQUEST_TYPE=WORP_LAUNCH_CGI&IBIMR_action=MR_RUN_FEX&IBIMR_domain=qavistes/qavistes.htm&IBIMR_folder=qavistes/qavistes.htm%23scrapdatatqg&IBIMR_fex=pprasino/scrap_report.fex&IBIMR_flags=myreport%2CinfoAssist%2Creport%2Croname%3Dqavistes/mrv/scrap_data.fex%2CisFex%3Dtrue%2CrunPowerPoint%3Dtrue&IBIMR_sub_action=MR_MY_REPORT&WORP_MRU=true&&WORP_MPV=ab_gbv&DISP_D=" & afterdate & "&LEDISP_D=" & beforedate & "&IBIMR_random=96021"
+    ''''''            Dim ref As String = "http://opsfocus01:8080/ibi_apps/Controller?WORP_REQUEST_TYPE=WORP_LAUNCH_CGI&IBIMR_action=MR_RUN_FEX&IBIMR_domain=qavistes/qavistes.htm&IBIMR_folder=qavistes/qavistes.htm%23scrapdatatqg&IBIMR_fex=pprasino/scrap_report.fex&IBIMR_flags=myreport%2CinfoAssist%2Creport%2Croname%3Dqavistes/mrv/scrap_data.fex%2CisFex%3Dtrue%2CrunPowerPoint%3Dtrue&IBIMR_sub_action=MR_MY_REPORT&WORP_MRU=true&&WORP_MPV=ab_gbv&DISP_D=" & afterdate & "&LEDISP_D=" & beforedate & "&IBIMR_random=96021"
 
-            Dim J As String()()
-            Dim wf1 As New WebfocusModule
-            Dim LogInInfo() As String
-            Do Until wf1.IsLoggedIn
-                LogInInfo = GetUserPasswordandFex()
-                wf1.LogIn(LogInInfo(0), LogInInfo(1))
-            Loop
-            ref = Replace(ref, "&IBIMR_sub_action=MR_MY_REPORT", LogInInfo(2))
-            J = wf1.GetReporth(ref)
-            If J.Length < 3 Then GoTo skiper
-            Dim WCList(0 To 14) As String
-            WCList(0) = "    MILESTONE" : WCList(1) = "                Wax" : WCList(2) = "              Invest" : WCList(3) = "                Melt" : WCList(4) = "       Pre-Finish" : WCList(5) = "              Finish" : WCList(6) = "  Pre OSP NDT" : WCList(8) = "                 OSP" : WCList(10) = "        Final NDT" : WCList(13) = "              DOCK"
-            WCList(14) = "             TOTAL"
-            Dim WCScrap(0 To 14) As Double
-            Dim TotalScrap As Double = 0
+    ''''''            Dim J As String()()
+    ''''''            ''''''Dim wf1 As New WebfocusModule
+    ''''''            ''''''Dim LogInInfo() As String
+    ''''''            ''''''Do Until wf1.IsLoggedIn
+    ''''''            ''''''LogInInfo = GetUserPasswordandFex()
+    ''''''            ''''''wf1.LogIn(LogInInfo(0), LogInInfo(1))
+    ''''''            ''''''Loop
+    ''''''            ''''''ref = Replace(ref, "&IBIMR_sub_action=MR_MY_REPORT", LogInInfo(2))
+    ''''''            ''''''J = wf1.GetReporth(ref)
+    ''''''            If J.Length < 3 Then GoTo skiper
+    ''''''            Dim WCList(0 To 14) As String
+    ''''''            WCList(0) = "    MILESTONE" : WCList(1) = "                Wax" : WCList(2) = "              Invest" : WCList(3) = "                Melt" : WCList(4) = "       Pre-Finish" : WCList(5) = "              Finish" : WCList(6) = "  Pre OSP NDT" : WCList(8) = "                 OSP" : WCList(10) = "        Final NDT" : WCList(13) = "              DOCK"
+    ''''''            WCList(14) = "             TOTAL"
+    ''''''            Dim WCScrap(0 To 14) As Double
+    ''''''            Dim TotalScrap As Double = 0
 
-            Dim WCcol As Integer = GetColumnNumber(J, "MILESTONE")
-            Dim ScrapCol As Integer = GetColumnNumber(J, "SCRAP_VALUE")
-            Dim ByWC As String()() = SumBy(J, GetColumnNumber(J, "RESPONSIBLE_WS"), ScrapCol)
-            Dim ByPart As String()() = SumBy(J, GetColumnNumber(J, "PARTNO"), ScrapCol, GetColumnNumber(J, "QTY_REJECTED"))
-            Dim ByPartPieces As String()() = SumBy(J, GetColumnNumber(J, "PARTNO"), GetColumnNumber(J, "QTY_REJECTED"))
-            Dim ByDefect As String()() = SumBy(J, GetColumnNumber(J, "REASON_CODE_DESCR"), ScrapCol)
-            For row = 1 To J.Length - 2
+    ''''''            Dim WCcol As Integer = GetColumnNumber(J, "MILESTONE")
+    ''''''            Dim ScrapCol As Integer = GetColumnNumber(J, "SCRAP_VALUE")
+    ''''''            Dim ByWC As String()() = SumBy(J, GetColumnNumber(J, "RESPONSIBLE_WS"), ScrapCol)
+    ''''''            Dim ByPart As String()() = SumBy(J, GetColumnNumber(J, "PARTNO"), ScrapCol, GetColumnNumber(J, "QTY_REJECTED"))
+    ''''''            Dim ByPartPieces As String()() = SumBy(J, GetColumnNumber(J, "PARTNO"), GetColumnNumber(J, "QTY_REJECTED"))
+    ''''''            Dim ByDefect As String()() = SumBy(J, GetColumnNumber(J, "REASON_CODE_DESCR"), ScrapCol)
+    ''''''            For row = 1 To J.Length - 2
 
-                TotalScrap = TotalScrap + CDbl(J(row)(ScrapCol))
-            Next row
+    ''''''                TotalScrap = TotalScrap + CDbl(J(row)(ScrapCol))
+    ''''''            Next row
 
-            st = st & vbCr & beforedate & "-->" & afterdate & TotalScrap
-            For i = 1 To 20
-                For c = 1 To 2
-                    st = st & ByWC(c - 1)(i) & ","
-                Next
-                st = st & vbCr
-            Next i
-            st = st & vbCr
-            For i = 1 To 20
-                For c = 1 To 2
-                    st = st & ByPart(c - 1)(i) & ","
-                Next
-                st = st & vbCr
-            Next i
-            st = st & vbCr
-            For i = 1 To 20
-                For c = 1 To 2
-                    st = st & ByDefect(c - 1)(i) & ","
-                Next
-                st = st & vbCr
-            Next i
-skiper:
-        Next q
-        FileIO.FileSystem.WriteAllText(outfile, st, False)
-    End Function
+    ''''''            st = st & vbCr & beforedate & "-->" & afterdate & TotalScrap
+    ''''''            For i = 1 To 20
+    ''''''                For c = 1 To 2
+    ''''''                    st = st & ByWC(c - 1)(i) & ","
+    ''''''                Next
+    ''''''                st = st & vbCr
+    ''''''            Next i
+    ''''''            st = st & vbCr
+    ''''''            For i = 1 To 20
+    ''''''                For c = 1 To 2
+    ''''''                    st = st & ByPart(c - 1)(i) & ","
+    ''''''                Next
+    ''''''                st = st & vbCr
+    ''''''            Next i
+    ''''''            st = st & vbCr
+    ''''''            For i = 1 To 20
+    ''''''                For c = 1 To 2
+    ''''''                    st = st & ByDefect(c - 1)(i) & ","
+    ''''''                Next
+    ''''''                st = st & vbCr
+    ''''''            Next i
+    ''''''skiper:
+    ''''''        Next q
+    ''''''        FileIO.FileSystem.WriteAllText(outfile, st, False)
+    ''''''    End Function
 
 
     Private Function GetLastMonths(Montharray(,) As String, dt As Date, NumBack As Integer)
